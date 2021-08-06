@@ -11,24 +11,35 @@ d3.json("../data/samples.json").then((importedData) => {
   data = data.reverse();
 
   // Trace1 for the Greek Data
-  var trace1 = {
+  var bar_data = {
     x: data.map(row => row.sample_values),
     y: data.map(row => row.otu_ids),
     text: data.map(row => row.otu_labels),
     type: "bar",
-    orientation: "h",
+    orientation: "h"    
+  };
+
+  var bar_layout = {
     title: 'Top 10 Bacteria Culters Found'
   };
-// Plotly.newPlot("bar-plot", data, layout);
 
-  var scatter = {
+//  // Plot the bar chart
+// Plotly.newPlot("bar", bar_data, layout);
+
+  var bubble_data = {
     x: data.map(row => row.id),
     y: data.map(row => row.sample_values),
     text: data.map(row => row.otu_labels),
     type: 'bubble',
-    
-  }
-// Plotly.plot("bubble", DataBubble, LayoutBubble);
+};
+
+  var bubble_layout = {
+    title: {title: 'Bacteria Cultures Per Sample'},
+    xaxis: 'OTU Id'
+};
+
+
+// Plotly.plot("bubble", bubble_data, LayoutBubble);
 });
 
 
@@ -73,5 +84,7 @@ function init(){
 function optionChanged(id){
     console.log(id);
 }
+
+// Initialize the dashboard
 init();
 
