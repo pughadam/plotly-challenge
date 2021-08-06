@@ -16,10 +16,19 @@ d3.json("../data/samples.json").then((importedData) => {
     y: data.map(row => row.otu_ids),
     text: data.map(row => row.otu_labels),
     type: "bar",
-    orientation: "h"
+    orientation: "h",
+    title: 'Top 10 Bacteria Culters Found'
   };
+// Plotly.newPlot("bar-plot", data, layout);
 
-
+  var scatter = {
+    x: data.map(row => row.id),
+    y: data.map(row => row.sample_values),
+    text: data.map(row => row.otu_labels),
+    type: 'bubble',
+    
+  }
+// Plotly.plot("bubble", DataBubble, LayoutBubble);
 });
 
 
