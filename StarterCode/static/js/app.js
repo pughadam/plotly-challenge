@@ -3,14 +3,13 @@
 //---------------------------------------------------------//
 // Use D3 fetch to read the JSON file
 // The data from the JSON file is arbitrarily named importedData as the argument
-
 function buildMetadata(sample) {
   d3.json("../data/samples.json").then((data) => {
     var metadata = data.metadata;
     var resultsarray = metadata.filter(dataobject =>
       dataobject.id == sample);
     var result = resultsarray[0]
-    var panel = d3.select("sample-metadata");
+    var panel = d3.select("#sample-metadata");
     panel.html("");
     Object.entries(result).forEach(([key, value]) => {
       panel.append("h6").text(`${key}: ${value}`);
@@ -26,14 +25,15 @@ d3.json("../data/samples.json").then((data) => {
       dataobject.id == sample);
   var result = resultsarray[0]
 
-  var otu_ids = result.otu_ids;
   var otu_labels = result.otu_labels;
+  var otu_ids = result.otu_ids;
   var values = result.sample_values;
 
-  // BUILD BUBBLE CHART WITH REVERSE ORDER
+  // BUILD BUBBLE CHART WITH SIZE ON VALUE
   var bubble_layout = {
     margin: { t: 0 },
-    xaxis: { title: "OTU ID" },
+    xaxis: { title: "OTU ID's by Value Size" },
+    yaxis: { title: "Value of Sample Data"},
     hovermode: "closest",
     };
 
@@ -44,49 +44,49 @@ d3.json("../data/samples.json").then((data) => {
       text: otu_labels,
       mode: "markers",
       marker: {
-        color: otu_ids,
-        size: values,
+      color: otu_ids,
+      size: values,
         }
     }
   ];
-
+// Plot the bar chart
 Plotly.newPlot("bubble", bubble_data, bubble_layout);
 
 // BUILD BAR CHART WITH REVERSE ORDER
-  var bar_data = [
-    {
-      y: otu_ids.slice(0,10).map(otuID => `OTU ${otuID}`).reverse(),
-      x: values.slice(0,10).reverse(),
-      text: otu_labels.slice(0,10).reverse(),
-      type: "bar",
-      orientation: "h"
-    }
-  ];
+var bar_data = [
+  {
+    y: otu_ids.slice(0,10).map(otu_ids => `OTU ${otu_ids}`).reverse(),
+    x: values.slice(0,10).reverse(),
+    text: otu_labels.slice(0,10).reverse(),
+    type: "bar",
+    orientation: "h"
+  }
+];
 
-  var bar_layout = {
-    title: 'Top 10 Bacteria Culters Found'
-  };
+var bar_layout = {
+  title: 'Top 10 Bacteria Culters Found'
+};
 
 // Plot the bar chart
 Plotly.newPlot("bar", bar_data, bar_layout);
-  });
+});
 }
 
 function init() {
-  // Grab a reference to the dropdown select element
-var selector = d3.select("#selDataset");
+// Grab a reference to the dropdown select element
+var dropdownMenu = d3.select("#selDataset");
   
-  // Use the list of sample names to populate the select options
-d3.json("samples.json").then((data) => {
+// Use the list of sample names to populate the select options
+d3.json("../data/samples.json").then((data) => {
   var sampleNames = data.names;
   sampleNames.forEach((sample) => {
-    selector
+    dropdownMenu
       .append("option")
       .text(sample)
       .property("value", sample);
   });
   
-    // Use the first sample from the list to build the initial plots
+  // Use the first sample from the list to build the initial plots
   const firstSample = sampleNames[0];
   buildCharts(firstSample);
   buildMetadata(firstSample);
