@@ -3,6 +3,7 @@
 //---------------------------------------------------------//
 // Use D3 fetch to read the JSON file
 // The data from the JSON file is arbitrarily named importedData as the argument
+// Remember the # for the "#sample-Metadata" -- takes forever to find that issue
 function buildMetadata(sample) {
   d3.json("../data/samples.json").then((data) => {
     var metadata = data.metadata;
@@ -18,7 +19,7 @@ function buildMetadata(sample) {
 }
 
 function buildCharts(sample) {
-
+// Get the path right for the data/samples.json file
 d3.json("../data/samples.json").then((data) => {
   var samples = data.samples;
   var resultsarray = samples.filter(dataobject =>
@@ -63,15 +64,17 @@ var bar_data = [
   }
 ];
 
+// Add title to the bar chart
 var bar_layout = {
   title: 'Top 10 Bacteria Culters Found'
 };
 
-// Plot the bar chart
+// Plot the bar chart -- remember the var declared above
 Plotly.newPlot("bar", bar_data, bar_layout);
 });
 }
 
+// Initiate Function
 function init() {
 // Grab a reference to the dropdown select element
 var dropdownMenu = d3.select("#selDataset");
